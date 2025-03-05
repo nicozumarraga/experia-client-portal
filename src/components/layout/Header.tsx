@@ -1,21 +1,22 @@
-
 import React, { useState } from 'react';
 import { PlusCircle, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useUploadModals } from '@/hooks/use-upload-modals';
-
 interface HeaderProps {
   toggleSidebar?: () => void;
 }
-
-const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
-  const { openInvoiceUpload, openDocumentUpload } = useUploadModals();
-  
-  return (
-    <header className="bg-background border-b border-border h-16 flex items-center justify-between px-6">
+const Header: React.FC<HeaderProps> = ({
+  toggleSidebar
+}) => {
+  const {
+    openInvoiceUpload,
+    openDocumentUpload
+  } = useUploadModals();
+  return <header className="bg-background border-b border-border h-16 flex items-center justify-between px-6">
       <div className="flex items-center">
-        <h1 className="text-lg font-medium">Document Management Portal</h1>
+        <h1 className="text-lg font-medium">
+      </h1>
       </div>
       
       <div className="flex items-center gap-2">
@@ -37,8 +38,6 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </header>
-  );
+    </header>;
 };
-
 export default Header;
