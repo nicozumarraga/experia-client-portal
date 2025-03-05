@@ -145,28 +145,30 @@ const DocumentUploadModal: React.FC = () => {
 
   return (
     <Dialog open={isDocumentUploadOpen} onOpenChange={closeDocumentUpload}>
-      <DialogContent className="sm:max-w-md md:max-w-2xl lg:max-w-3xl">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md md:max-w-2xl lg:max-w-3xl p-0 overflow-hidden">
+        <DialogHeader className="px-6 pt-6 pb-2">
           <DialogTitle>Upload Documents by Category</DialogTitle>
           <DialogDescription>
             Organize and upload documents to their respective categories
           </DialogDescription>
         </DialogHeader>
         
-        <div className="py-4">
+        <div className="px-2 py-3 md:px-6 md:py-4">
           <Tabs defaultValue={DOCUMENT_CATEGORIES[0]} value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-4 flex flex-wrap max-w-full h-auto">
-              {DOCUMENT_CATEGORIES.map((cat) => (
-                <TabsTrigger key={cat} value={cat} className="relative flex-shrink-0">
-                  {cat}
-                  {getCategoryFileCount(cat) > 0 && (
-                    <Badge variant="secondary" className="ml-1">
-                      {getCategoryFileCount(cat)}
-                    </Badge>
-                  )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="mb-4 overflow-x-auto pb-2">
+              <TabsList className="flex flex-nowrap max-w-full h-auto">
+                {DOCUMENT_CATEGORIES.map((cat) => (
+                  <TabsTrigger key={cat} value={cat} className="relative flex-shrink-0 whitespace-nowrap">
+                    {cat}
+                    {getCategoryFileCount(cat) > 0 && (
+                      <Badge variant="secondary" className="ml-1">
+                        {getCategoryFileCount(cat)}
+                      </Badge>
+                    )}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
 
             {DOCUMENT_CATEGORIES.map((cat) => (
               <TabsContent key={cat} value={cat} className="pt-2">
@@ -199,27 +201,27 @@ const DocumentUploadModal: React.FC = () => {
                 </div>
                 
                 {categoryFiles.find(c => c.category === cat)?.files.length > 0 && (
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium">Selected Files for {cat}</h4>
+                  <div className="mt-4 bg-muted/30 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-medium text-sm md:text-base">Files for {cat}</h4>
                       <Button 
                         variant="ghost" 
                         size="sm" 
                         className="h-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                         onClick={() => removeCategory(cat)}
                       >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Remove All
+                        <Trash2 className="h-4 w-4 mr-1 md:mr-2" />
+                        <span className="text-xs md:text-sm">Remove All</span>
                       </Button>
                     </div>
-                    <ScrollArea className="max-h-40">
-                      <div className="space-y-2 pr-2">
+                    <ScrollArea className="max-h-32 md:max-h-40">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pr-2">
                         {categoryFiles.find(c => c.category === cat)?.files.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-muted/50 p-2 rounded-md">
-                            <div className="flex items-center gap-2 overflow-hidden">
+                          <div key={index} className="flex items-center justify-between bg-background p-2 rounded-md">
+                            <div className="flex items-center gap-2 overflow-hidden max-w-[calc(100%-28px)]">
                               <File className="h-4 w-4 flex-shrink-0" />
-                              <span className="truncate">{file.name}</span>
-                              <span className="text-xs text-muted-foreground">
+                              <span className="truncate text-xs md:text-sm">{file.name}</span>
+                              <span className="text-xs text-muted-foreground hidden md:inline">
                                 ({formatFileSize(file.size)})
                               </span>
                             </div>
@@ -227,9 +229,9 @@ const DocumentUploadModal: React.FC = () => {
                               variant="ghost"
                               size="icon"
                               onClick={() => removeFile(cat, index)}
-                              className="h-6 w-6"
+                              className="h-6 w-6 flex-shrink-0"
                             >
-                              <X className="h-4 w-4" />
+                              <X className="h-3 w-3 md:h-4 md:w-4" />
                             </Button>
                           </div>
                         ))}
@@ -242,36 +244,36 @@ const DocumentUploadModal: React.FC = () => {
           </Tabs>
 
           {totalFileCount > 0 && (
-            <div className="mt-6 p-3 bg-muted/50 rounded-md">
-              <h4 className="font-medium mb-2">Upload Summary</h4>
-              <div className="grid grid-cols-2 gap-2 mb-2">
+            <div className="mt-6 p-3 bg-muted/30 rounded-lg">
+              <h4 className="font-medium mb-2 text-sm md:text-base">Upload Summary</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                 {categoryFiles.map((category) => (
                   <div key={category.category} className="flex justify-between items-center p-2 bg-background rounded-md">
-                    <span className="font-medium">{category.category}</span>
-                    <Badge variant="outline">{category.files.length} files</Badge>
+                    <span className="font-medium text-xs md:text-sm truncate mr-2">{category.category}</span>
+                    <Badge variant="outline" className="text-xs">{category.files.length} files</Badge>
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Total: {totalFileCount} files across {categoryFiles.length} categories
               </p>
             </div>
           )}
         </div>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={closeDocumentUpload} disabled={isUploading}>
+        <DialogFooter className="px-6 py-4 bg-muted/20 border-t">
+          <Button variant="outline" onClick={closeDocumentUpload} disabled={isUploading} size="sm" className="md:size-default">
             Cancel
           </Button>
           <Button 
             onClick={handleUpload} 
             disabled={totalFileCount === 0 || isUploading}
             className="bg-company hover:bg-company-dark"
+            size="sm"
+            className="md:size-default"
           >
             {isUploading ? (
-              <>
-                <span className="animate-pulse">Uploading...</span>
-              </>
+              <span className="animate-pulse">Uploading...</span>
             ) : (
               <>
                 <Upload className="mr-2 h-4 w-4" />

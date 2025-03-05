@@ -36,6 +36,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     if (isMobileView) {
       setShowMobileSidebar(false);
     }
+    // We're intentionally NOT collapsing the sidebar on desktop when changing routes
   }, [location.pathname, isMobileView]);
 
   const toggleSidebar = () => {
