@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -121,7 +120,7 @@
   }
 
   .file-drop-area {
-    @apply border-2 border-dashed border-muted-foreground/30 rounded-lg p-4 md:p-8 text-center transition-all duration-200 ease-in-out;
+    @apply border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 text-center transition-all duration-200 ease-in-out;
   }
 
   .file-drop-area.drag-active {
