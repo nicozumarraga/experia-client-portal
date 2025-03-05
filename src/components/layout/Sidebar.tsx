@@ -14,15 +14,25 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
   const location = useLocation();
   
   const Logo = () => (
-    <div className="flex items-center gap-2 px-2 py-4">
-      <div className="flex-shrink-0 w-8 h-8 bg-fiduciary-700 rounded-md flex items-center justify-center">
-        <span className="text-white font-semibold text-lg">F</span>
+    <div className="flex items-center justify-between gap-2 px-2 py-4 border-b border-border">
+      <div className="flex items-center gap-2">
+        <div className="flex-shrink-0 w-8 h-8 bg-company rounded-md flex items-center justify-center">
+          <span className="text-white font-semibold text-lg">F</span>
+        </div>
+        {!collapsed && (
+          <span className="font-semibold text-lg truncate animate-fade-in">
+            Fiduciary
+          </span>
+        )}
       </div>
-      {!collapsed && (
-        <span className="font-semibold text-lg truncate animate-fade-in">
-          Fiduciary
-        </span>
-      )}
+      <Button 
+        onClick={toggleSidebar}
+        variant="ghost" 
+        size="sm" 
+        className="flex justify-center items-center h-8 w-8 p-0"
+      >
+        {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+      </Button>
     </div>
   );
   
@@ -62,22 +72,14 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
           label="Overview" 
           icon={<LayoutDashboard size={20} />} 
         />
+      </nav>
+      
+      <div className="mt-auto px-2 py-4 border-t border-border">
         <SidebarItem 
           path="/settings" 
           label="Settings" 
           icon={<Settings size={20} />} 
         />
-      </nav>
-      
-      <div className="p-2 border-t border-border">
-        <Button 
-          onClick={toggleSidebar}
-          variant="ghost" 
-          size="sm" 
-          className="w-full flex justify-center items-center"
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </Button>
       </div>
     </aside>
   );
