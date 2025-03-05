@@ -84,6 +84,12 @@
     --sidebar-border: 217.2 32.6% 17.5%;
     --sidebar-ring: 205 47% 42%; /* Lighter company color for dark mode */
   }
+
+  @media (max-width: 768px) {
+    .container {
+      @apply px-4;
+    }
+  }
 }
 
 @layer base {
@@ -96,7 +102,6 @@
     font-family: 'Inter', sans-serif;
   }
 
-  /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -114,7 +119,6 @@
     @apply bg-muted-foreground/30;
   }
 
-  /* File upload area */
   .file-drop-area {
     @apply border-2 border-dashed border-muted-foreground/30 rounded-lg p-8 text-center transition-all duration-200 ease-in-out;
   }
@@ -123,7 +127,6 @@
     @apply border-primary/70 bg-primary/5;
   }
 
-  /* Card hover effect */
   .hover-card {
     @apply transition-all duration-200 ease-in-out;
   }
@@ -132,8 +135,25 @@
     @apply shadow-md translate-y-[-2px];
   }
 
-  /* Sidebar active item */
   .sidebar-item.active {
     @apply bg-sidebar-accent text-sidebar-accent-foreground font-medium;
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      @apply p-4;
+    }
+    
+    h1 {
+      @apply text-xl;
+    }
+    
+    .mobile-hidden {
+      @apply hidden;
+    }
+    
+    .mobile-full-width {
+      @apply w-full;
+    }
   }
 }
