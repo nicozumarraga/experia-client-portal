@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { X, Upload, File, Folder, FolderOpen, Plus, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -35,7 +34,6 @@ const DocumentUploadModal: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Get total file count across all categories
   const totalFileCount = categoryFiles.reduce((acc, category) => acc + category.files.length, 0);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +67,6 @@ const DocumentUploadModal: React.FC = () => {
       const categoryIndex = prev.findIndex(c => c.category === category);
       
       if (categoryIndex >= 0) {
-        // Category exists, add files to it
         const updatedCategories = [...prev];
         updatedCategories[categoryIndex] = {
           ...updatedCategories[categoryIndex],
@@ -77,7 +74,6 @@ const DocumentUploadModal: React.FC = () => {
         };
         return updatedCategories;
       } else {
-        // New category
         return [...prev, { category, files }];
       }
     });
@@ -93,7 +89,7 @@ const DocumentUploadModal: React.FC = () => {
           };
         }
         return c;
-      }).filter(c => c.files.length > 0); // Remove categories with no files
+      }).filter(c => c.files.length > 0);
       
       return updatedCategories;
     });
@@ -115,12 +111,10 @@ const DocumentUploadModal: React.FC = () => {
 
     setIsUploading(true);
     try {
-      // Upload files for each category
       for (const { category, files } of categoryFiles) {
         await uploadFiles(files, 'document', category);
       }
       
-      // Reset state
       setCategoryFiles([]);
       closeDocumentUpload();
       toast.success(`All documents uploaded successfully to their respective categories`);
@@ -137,7 +131,6 @@ const DocumentUploadModal: React.FC = () => {
     else return (bytes / 1048576).toFixed(1) + ' MB';
   };
 
-  // Find if category has files already
   const getCategoryFileCount = (category: string) => {
     const categoryData = categoryFiles.find(c => c.category === category);
     return categoryData ? categoryData.files.length : 0;
@@ -262,7 +255,7 @@ const DocumentUploadModal: React.FC = () => {
         </div>
         
         <DialogFooter className="px-6 py-4 bg-muted/20 border-t">
-          <Button variant="outline" onClick={closeDocumentUpload} disabled={isUploading} size="sm" className="md:size-default">
+          <Button variant="outline" onClick={closeDocumentUpload} disabled={isUploading} size="sm">
             Cancel
           </Button>
           <Button 
@@ -270,7 +263,6 @@ const DocumentUploadModal: React.FC = () => {
             disabled={totalFileCount === 0 || isUploading}
             className="bg-company hover:bg-company-dark"
             size="sm"
-            className="md:size-default"
           >
             {isUploading ? (
               <span className="animate-pulse">Uploading...</span>
