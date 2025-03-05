@@ -31,11 +31,12 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  // Auto-collapse sidebar on mobile after route change
+  // Only auto-collapse sidebar on mobile after route change
   useEffect(() => {
     if (isMobileView) {
       setShowMobileSidebar(false);
     }
+    // Desktop sidebar maintains its state when navigating
   }, [location.pathname, isMobileView]);
 
   const toggleSidebar = () => {

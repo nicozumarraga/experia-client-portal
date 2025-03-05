@@ -99,10 +99,6 @@ const DocumentUploadModal: React.FC = () => {
     });
   };
 
-  const removeCategory = (category: string) => {
-    setCategoryFiles(prev => prev.filter(c => c.category !== category));
-  };
-
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
   };
@@ -200,26 +196,15 @@ const DocumentUploadModal: React.FC = () => {
                 
                 {categoryFiles.find(c => c.category === cat)?.files.length > 0 && (
                   <div className="mt-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-medium">Selected Files for {cat}</h4>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => removeCategory(cat)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Remove All
-                      </Button>
-                    </div>
-                    <ScrollArea className="max-h-40">
+                    <h4 className="font-medium mb-2">Selected Files for {cat}</h4>
+                    <ScrollArea className="max-h-40 md:max-h-60">
                       <div className="space-y-2 pr-2">
                         {categoryFiles.find(c => c.category === cat)?.files.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between bg-muted/50 p-2 rounded-md">
-                            <div className="flex items-center gap-2 overflow-hidden">
-                              <File className="h-4 w-4 flex-shrink-0" />
-                              <span className="truncate">{file.name}</span>
-                              <span className="text-xs text-muted-foreground">
+                          <div key={index} className="flex items-center justify-between bg-muted/50 p-2 rounded-md hover:bg-muted transition-colors">
+                            <div className="flex items-center gap-2 overflow-hidden flex-1">
+                              <File className="h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                              <span className="truncate text-sm">{file.name}</span>
+                              <span className="text-xs text-muted-foreground whitespace-nowrap">
                                 ({formatFileSize(file.size)})
                               </span>
                             </div>
@@ -227,7 +212,7 @@ const DocumentUploadModal: React.FC = () => {
                               variant="ghost"
                               size="icon"
                               onClick={() => removeFile(cat, index)}
-                              className="h-6 w-6"
+                              className="h-6 w-6 text-muted-foreground hover:text-destructive"
                             >
                               <X className="h-4 w-4" />
                             </Button>
@@ -244,7 +229,7 @@ const DocumentUploadModal: React.FC = () => {
           {totalFileCount > 0 && (
             <div className="mt-6 p-3 bg-muted/50 rounded-md">
               <h4 className="font-medium mb-2">Upload Summary</h4>
-              <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                 {categoryFiles.map((category) => (
                   <div key={category.category} className="flex justify-between items-center p-2 bg-background rounded-md">
                     <span className="font-medium">{category.category}</span>
