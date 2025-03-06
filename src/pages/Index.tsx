@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, FileText, Clock, AlertCircle } from 'lucide-react';
+import { Loader2, FileText, Clock, AlertCircle, Upload } from 'lucide-react';
 import AppLayout from '@/components/layout/AppLayout';
 import { useAuth } from '@/providers/AuthContext';
 import RecentLogs from '@/components/overview/RecentLogs';
@@ -9,6 +9,7 @@ import InvoiceUploadModal from '@/components/uploads/InvoiceUploadModal';
 import DocumentUploadModal from '@/components/uploads/DocumentUploadModal';
 import { useRecentLogsStore } from '@/stores/RecentLogsStore';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -48,11 +49,34 @@ const Index = () => {
   if (!isAuthenticated) {
     return null; // Will redirect to login
   }
+
+  const EmptyState = () => (
+    <div className="text-center py-12 space-y-4">
+      <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+        <Upload className="h-8 w-8 text-primary" />
+      </div>
+      <h3 className="text-lg font-medium">No documents yet</h3>
+      <p className="text-muted-foreground">Upload your first documents to get started</p>
+      <div className="pt-4 flex justify-center gap-3">
+        <Button 
+          onClick={() => useUploadModals.getState().openInvoiceUpload()} 
+          variant="outline"
+        >
+          Upload Invoice
+        </Button>
+        <Button 
+          onClick={() => useUploadModals.getState().openDocumentUpload()}
+        >
+          Upload Document
+        </Button>
+      </div>
+    </div>
+  );
   
   return (
     <AppLayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1 className="text-xl font-bold tracking-tight">
           Welcome, {user?.name}
         </h1>
         
@@ -63,7 +87,7 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Total Documents</p>
                 <p className="text-2xl font-bold">{summaryData.total}</p>
               </div>
-              <FileText className="h-8 w-8 text-[#182561]" />
+              <FileText className="h-6 w-6 text-[#182561]" />
             </CardContent>
           </Card>
           
@@ -73,7 +97,7 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Pending</p>
                 <p className="text-2xl font-bold">{summaryData.pending}</p>
               </div>
-              <Clock className="h-8 w-8 text-amber-500" />
+              <Clock className="h-6 w-6 text-[#182561]" />
             </CardContent>
           </Card>
           
@@ -83,12 +107,16 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Failed</p>
                 <p className="text-2xl font-bold">{summaryData.failed}</p>
               </div>
-              <AlertCircle className="h-8 w-8 text-red-500" />
+              <AlertCircle className="h-6 w-6 text-[#182561]" />
             </CardContent>
           </Card>
         </div>
         
-        <RecentLogs logs={logs} />
+        {logs.length > 0 ? (
+          <RecentLogs logs={logs} />
+        ) : (
+          <EmptyState />
+        )}
       </div>
       
       {/* Modals */}
