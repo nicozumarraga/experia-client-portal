@@ -15,7 +15,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 205 47% 33%; /* Company color */
+    --primary: 225 55% 24%; /* Changed to #182561 */
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -32,18 +32,18 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 205 47% 33%; /* Company color */
+    --ring: 225 55% 24%; /* Changed to #182561 */
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 205 47% 33%; /* Company color */
+    --sidebar-primary: 225 55% 24%; /* Changed to #182561 */
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 210 40% 96.1%;
     --sidebar-accent-foreground: 222.2 47.4% 11.2%;
     --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 205 47% 33%; /* Company color */
+    --sidebar-ring: 225 55% 24%; /* Changed to #182561 */
   }
 
   .dark {

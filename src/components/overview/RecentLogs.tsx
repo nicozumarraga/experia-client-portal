@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
 export interface LogEntry {
   id: string;
   documentName: string;
@@ -17,11 +18,14 @@ export interface LogEntry {
   category?: string;
   validationReason?: string;
 }
+
 interface RecentLogsProps {
   logs: LogEntry[];
 }
+
 type SortField = 'documentName' | 'documentType' | 'timestamp' | 'status' | null;
 type SortOrder = 'asc' | 'desc' | null;
+
 const RecentLogs: React.FC<RecentLogsProps> = ({
   logs
 }) => {
@@ -31,6 +35,7 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
+
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       if (sortOrder === 'asc') {
@@ -44,14 +49,18 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
       setSortOrder('asc');
     }
   };
+
   const filteredAndSortedLogs = useMemo(() => {
     let result = [...logs];
+    
     if (statusFilter !== 'all') {
       result = result.filter(log => log.status === statusFilter);
     }
+    
     if (typeFilter !== 'all') {
       result = result.filter(log => log.documentType === typeFilter);
     }
+    
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const yesterday = new Date(today);
@@ -60,30 +69,51 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
     lastWeek.setDate(lastWeek.getDate() - 7);
     const lastMonth = new Date(today);
     lastMonth.setMonth(lastMonth.getMonth() - 1);
+    
     if (dateFilter === 'today') {
-      result = result.filter(log => log.timestamp >= today);
+      result = result.filter(log => {
+        const timestamp = log.timestamp instanceof Date ? log.timestamp : new Date(log.timestamp);
+        return timestamp >= today;
+      });
     } else if (dateFilter === 'yesterday') {
-      result = result.filter(log => log.timestamp >= yesterday && log.timestamp < today);
+      result = result.filter(log => {
+        const timestamp = log.timestamp instanceof Date ? log.timestamp : new Date(log.timestamp);
+        return timestamp >= yesterday && timestamp < today;
+      });
     } else if (dateFilter === 'lastWeek') {
-      result = result.filter(log => log.timestamp >= lastWeek);
+      result = result.filter(log => {
+        const timestamp = log.timestamp instanceof Date ? log.timestamp : new Date(log.timestamp);
+        return timestamp >= lastWeek;
+      });
     } else if (dateFilter === 'lastMonth') {
-      result = result.filter(log => log.timestamp >= lastMonth);
+      result = result.filter(log => {
+        const timestamp = log.timestamp instanceof Date ? log.timestamp : new Date(log.timestamp);
+        return timestamp >= lastMonth;
+      });
     }
+    
     if (sortField && sortOrder) {
       result.sort((a, b) => {
+        if (sortField === 'timestamp') {
+          const aTimestamp = a.timestamp instanceof Date ? a.timestamp : new Date(a.timestamp);
+          const bTimestamp = b.timestamp instanceof Date ? b.timestamp : new Date(b.timestamp);
+          return sortOrder === 'asc' ? aTimestamp.getTime() - bTimestamp.getTime() : bTimestamp.getTime() - aTimestamp.getTime();
+        }
+        
         let aValue = a[sortField];
         let bValue = b[sortField];
-        if (sortField === 'timestamp') {
-          return sortOrder === 'asc' ? aValue.getTime() - bValue.getTime() : bValue.getTime() - aValue.getTime();
-        }
+        
         if (typeof aValue === 'string' && typeof bValue === 'string') {
           return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
         }
+        
         return 0;
       });
     }
+    
     return result;
   }, [logs, sortField, sortOrder, statusFilter, typeFilter, dateFilter]);
+
   const renderStatus = (status: LogEntry['status'], reason?: string) => {
     switch (status) {
       case 'pending':
@@ -115,6 +145,7 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
         return null;
     }
   };
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -124,16 +155,20 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
       minute: '2-digit'
     }).format(date);
   };
+
   const renderSortIcon = (field: SortField) => {
     if (sortField !== field) return null;
     return sortOrder === 'asc' ? <ArrowUp className="ml-1 h-3 w-3 inline" /> : <ArrowDown className="ml-1 h-3 w-3 inline" />;
   };
+
   const resetFilters = () => {
     setStatusFilter('all');
     setTypeFilter('all');
     setDateFilter('all');
   };
-  return <Card>
+
+  return (
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <CardTitle>Recent Uploads</CardTitle>
@@ -262,6 +297,8 @@ const RecentLogs: React.FC<RecentLogsProps> = ({
           </TableBody>
         </Table>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
+
 export default RecentLogs;

@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-company hover:bg-company-dark text-white">
+            <Button className="bg-[#182561] hover:bg-[#121d4e] text-white">
               <PlusCircle className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Upload</span>
               <ChevronDown className="ml-2 h-4 w-4" />
