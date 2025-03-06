@@ -99,6 +99,7 @@ const InvoiceUploadModal: React.FC = () => {
               multiple
               className="hidden"
               accept=".pdf,.jpg,.jpeg,.png"
+              data-testid="file-input"
             />
             <FileText className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
             <p className="text-muted-foreground mb-2">Drag and drop files here, or</p>
@@ -128,6 +129,7 @@ const InvoiceUploadModal: React.FC = () => {
                       size="icon"
                       onClick={() => removeFile(index)}
                       className="h-6 w-6"
+                      aria-label="Remove file"
                     >
                       <X className="h-4 w-4" />
                     </Button>
