@@ -140,17 +140,8 @@ const LogsTable: React.FC<LogsTableProps> = ({
               </span>
             )}
           </TableHead>
-          <TableHead
-            className="cursor-pointer hover:text-gray-900"
-            onClick={() => handleSort('validationReason')}
-          >
+          <TableHead>
             Details
-            {sortField === 'validationReason' && (
-              <span className="ml-1">
-                {sortOrder === 'desc' && '↓'}
-                {sortOrder === 'asc' && '↑'}
-              </span>
-            )}
           </TableHead>
         </TableRow>
       </TableHeader>

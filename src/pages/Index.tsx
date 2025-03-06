@@ -1,5 +1,4 @@
-
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, FileText, Clock, AlertCircle, Upload } from 'lucide-react';
 import AppLayout from '@/components/layout/AppLayout';
@@ -11,11 +10,32 @@ import { useRecentLogsStore } from '@/stores/RecentLogsStore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useUploadModals } from '@/hooks/use-upload-modals';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { logs, isLoading: logsLoading, fetchLogs } = useRecentLogsStore();
   const navigate = useNavigate();
+
+  const [statusFilter, setStatusFilter] = React.useState('all');
+
+  // Helper function to determine if a card is selected
+  const isCardSelected = (cardFilter: string) => {
+    if (cardFilter === 'failed') {
+      return statusFilter === 'failed' || statusFilter === 'rejected';
+    }
+    return statusFilter === cardFilter;
+  };
+
+  // Modified handler to toggle filters
+  const handleStatusFilterChange = useCallback((status: string) => {
+    setStatusFilter(current => current === status ? 'all' : status);
+  }, []);
+
+  // Add this reset function
+  const handleResetFilters = useCallback(() => {
+    setStatusFilter('all');
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -82,39 +102,71 @@ const Index = () => {
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="hover-card">
+          <Card
+            className={cn(
+              "hover-card cursor-pointer transition-colors",
+              isCardSelected('all') && "border-primary"
+            )}
+            onClick={() => handleStatusFilterChange('all')}
+          >
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Total Documents</p>
                 <p className="text-2xl font-bold">{summaryData.total}</p>
               </div>
-              <FileText className="h-6 w-6 text-[#182561]" />
+              <FileText className={cn(
+                "h-6 w-6",
+                isCardSelected('all') ? "text-primary" : "text-[#182561]"
+              )} />
             </CardContent>
           </Card>
 
-          <Card className="hover-card">
+          <Card
+            className={cn(
+              "hover-card cursor-pointer transition-colors",
+              isCardSelected('pending') && "border-primary"
+            )}
+            onClick={() => handleStatusFilterChange('pending')}
+          >
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pending</p>
                 <p className="text-2xl font-bold">{summaryData.pending}</p>
               </div>
-              <Clock className="h-6 w-6 text-[#182561]" />
+              <Clock className={cn(
+                "h-6 w-6",
+                isCardSelected('pending') ? "text-primary" : "text-[#182561]"
+              )} />
             </CardContent>
           </Card>
 
-          <Card className="hover-card">
+          <Card
+            className={cn(
+              "hover-card cursor-pointer transition-colors",
+              isCardSelected('failed') && "border-primary"
+            )}
+            onClick={() => handleStatusFilterChange('failed')}
+          >
             <CardContent className="p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Failed</p>
                 <p className="text-2xl font-bold">{summaryData.failed}</p>
               </div>
-              <AlertCircle className="h-6 w-6 text-[#182561]" />
+              <AlertCircle className={cn(
+                "h-6 w-6",
+                isCardSelected('failed') ? "text-primary" : "text-[#182561]"
+              )} />
             </CardContent>
           </Card>
         </div>
 
         {logs.length > 0 ? (
-          <RecentLogs logs={logs} />
+          <RecentLogs
+            logs={logs}
+            statusFilter={statusFilter}
+            onStatusFilterChange={handleStatusFilterChange}
+            onResetFilters={handleResetFilters}
+          />
         ) : (
           <EmptyState />
         )}

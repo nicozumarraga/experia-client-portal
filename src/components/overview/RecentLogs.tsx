@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useLogsFilter } from './hooks/useLogsFilter';
@@ -9,24 +8,30 @@ import { LogEntry } from './types';
 
 interface RecentLogsProps {
   logs: LogEntry[];
+  statusFilter: string;
+  onStatusFilterChange: (status: string) => void;
+  onResetFilters: () => void;
 }
 
-const RecentLogs: React.FC<RecentLogsProps> = ({ logs }) => {
+const RecentLogs: React.FC<RecentLogsProps> = ({ logs, statusFilter, onStatusFilterChange, onResetFilters }) => {
   const {
     sortField,
     sortOrder,
-    statusFilter,
     typeFilter,
     dateFilter,
     showFilters,
     filteredAndSortedLogs,
     handleSort,
-    setStatusFilter,
     setTypeFilter,
     setDateFilter,
     setShowFilters,
     resetFilters
-  } = useLogsFilter(logs);
+  } = useLogsFilter({ logs, statusFilter });
+
+  const handleResetFilters = () => {
+    resetFilters();
+    onResetFilters();
+  };
 
   return (
     <Card>
@@ -35,17 +40,19 @@ const RecentLogs: React.FC<RecentLogsProps> = ({ logs }) => {
           <CardTitle>Recent Uploads</CardTitle>
           <CardDescription>View the status of your recent document uploads</CardDescription>
         </div>
-        <FilterPopover
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          typeFilter={typeFilter}
-          setTypeFilter={setTypeFilter}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-          showFilters={showFilters}
-          setShowFilters={setShowFilters}
-          resetFilters={resetFilters}
-        />
+        <div className="flex items-center gap-2">
+          <FilterPopover
+            statusFilter={statusFilter}
+            setStatusFilter={onStatusFilterChange}
+            typeFilter={typeFilter}
+            setTypeFilter={setTypeFilter}
+            dateFilter={dateFilter}
+            setDateFilter={setDateFilter}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            resetFilters={handleResetFilters}
+          />
+        </div>
       </CardHeader>
       <CardContent>
         <LogsTable
