@@ -1,7 +1,7 @@
 
 import { create } from 'zustand';
 import { toast } from 'sonner';
-import { LogEntry } from '@/components/overview/RecentLogs';
+import { LogEntry } from '@/components/overview/types';
 
 interface LogsState {
   logs: LogEntry[];
