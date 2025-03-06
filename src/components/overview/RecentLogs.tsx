@@ -19,11 +19,13 @@ const RecentLogs: React.FC<RecentLogsProps> = ({ logs, statusFilter, onStatusFil
     sortOrder,
     typeFilter,
     dateFilter,
+    dateRange,
     showFilters,
     filteredAndSortedLogs,
     handleSort,
     setTypeFilter,
     setDateFilter,
+    setDateRange,
     setShowFilters,
     resetFilters
   } = useLogsFilter({ logs, statusFilter });
@@ -48,6 +50,8 @@ const RecentLogs: React.FC<RecentLogsProps> = ({ logs, statusFilter, onStatusFil
             setTypeFilter={setTypeFilter}
             dateFilter={dateFilter}
             setDateFilter={setDateFilter}
+            dateRange={dateRange}
+            setDateRange={setDateRange}
             showFilters={showFilters}
             setShowFilters={setShowFilters}
             resetFilters={handleResetFilters}
