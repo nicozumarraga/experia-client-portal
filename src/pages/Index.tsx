@@ -10,34 +10,35 @@ import DocumentUploadModal from '@/components/uploads/DocumentUploadModal';
 import { useRecentLogsStore } from '@/stores/RecentLogsStore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useUploadModals } from '@/hooks/use-upload-modals';
 
 const Index = () => {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const { logs, isLoading: logsLoading, fetchLogs } = useRecentLogsStore();
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       navigate('/login');
     }
   }, [isAuthenticated, authLoading, navigate]);
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchLogs();
     }
   }, [isAuthenticated, fetchLogs]);
-  
+
   const summaryData = useMemo(() => {
     if (!logs.length) return { total: 0, pending: 0, failed: 0 };
-    
+
     return {
       total: logs.length,
       pending: logs.filter(log => log.status === 'pending').length,
       failed: logs.filter(log => log.status === 'failed' || log.status === 'rejected').length
     };
   }, [logs]);
-  
+
   if (authLoading || logsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -45,7 +46,7 @@ const Index = () => {
       </div>
     );
   }
-  
+
   if (!isAuthenticated) {
     return null; // Will redirect to login
   }
@@ -58,13 +59,13 @@ const Index = () => {
       <h3 className="text-lg font-medium">No documents yet</h3>
       <p className="text-muted-foreground">Upload your first documents to get started</p>
       <div className="pt-4 flex justify-center gap-3">
-        <Button 
-          onClick={() => useUploadModals.getState().openInvoiceUpload()} 
+        <Button
+          onClick={() => useUploadModals.getState().openInvoiceUpload()}
           variant="outline"
         >
           Upload Invoice
         </Button>
-        <Button 
+        <Button
           onClick={() => useUploadModals.getState().openDocumentUpload()}
         >
           Upload Document
@@ -72,14 +73,14 @@ const Index = () => {
       </div>
     </div>
   );
-  
+
   return (
     <AppLayout>
       <div className="space-y-6">
         <h1 className="text-xl font-bold tracking-tight">
           Welcome, {user?.name}
         </h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card className="hover-card">
             <CardContent className="p-4 flex items-center justify-between">
@@ -90,7 +91,7 @@ const Index = () => {
               <FileText className="h-6 w-6 text-[#182561]" />
             </CardContent>
           </Card>
-          
+
           <Card className="hover-card">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
@@ -100,7 +101,7 @@ const Index = () => {
               <Clock className="h-6 w-6 text-[#182561]" />
             </CardContent>
           </Card>
-          
+
           <Card className="hover-card">
             <CardContent className="p-4 flex items-center justify-between">
               <div>
@@ -111,14 +112,14 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
-        
+
         {logs.length > 0 ? (
           <RecentLogs logs={logs} />
         ) : (
           <EmptyState />
         )}
       </div>
-      
+
       {/* Modals */}
       <InvoiceUploadModal />
       <DocumentUploadModal />

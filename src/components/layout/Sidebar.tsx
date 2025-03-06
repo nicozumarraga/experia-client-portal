@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -15,21 +14,31 @@ const Sidebar: React.FC<SidebarProps> = ({
   toggleSidebar
 }) => {
   const location = useLocation();
-  
+
   const Logo = () => (
-    <div className="flex items-center justify-between gap-2 px-2 py-4 border-b border-border">
+    <div className="flex items-center justify-between gap-2 px-4 py-4 border-b border-border">
       <div className="flex items-center gap-2">
-        <div className="flex-shrink-0 w-8 h-8 bg-company rounded-md flex items-center justify-center">
-          <span className="text-white font-semibold text-lg">🏛️</span>
+        <div className="flex-shrink-0 flex items-center justify-center p-0">
+          <img src="/assets/experia_icon.svg" alt="Experia Icon" className="w-7 h-7" />
+          {!collapsed && (
+            <img src="/assets/experia_text.svg" alt="Experia Text" className="ml-2 h-2.5" />
+          )}
         </div>
-        {!collapsed && <span className="font-semibold text-lg truncate animate-fade-in">Experia Sarl</span>}
       </div>
-      <Button onClick={toggleSidebar} variant="ghost" size="sm" className="flex md:flex justify-center items-center h-8 w-8 p-0">
+      <Button
+        onClick={toggleSidebar}
+        variant="ghost"
+        size="sm"
+        className={cn(
+          "flex md:flex justify-center items-center h-8 w-8 p-0 text-gray-500",
+          collapsed && "ml-5"
+        )}
+      >
         {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
       </Button>
     </div>
   );
-  
+
   const SidebarItem = ({
     path,
     label,
@@ -41,10 +50,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   }) => {
     const isActive = location.pathname === path;
     return (
-      <Link 
-        to={path} 
+      <Link
+        to={path}
         className={cn(
-          "flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200 sidebar-item", 
+          "flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200 sidebar-item",
           isActive ? "active" : "hover:bg-sidebar-accent/70"
         )}
       >
@@ -57,20 +66,20 @@ const Sidebar: React.FC<SidebarProps> = ({
       </Link>
     );
   };
-  
+
   return (
-    <aside 
+    <aside
       className={cn(
         "bg-sidebar h-screen border-r border-border transition-all duration-300 ease-in-out flex flex-col",
         collapsed ? "w-16" : "w-64"
       )}
     >
       <Logo />
-      
+
       <nav className="flex-1 px-2 py-4 space-y-1">
         <SidebarItem path="/" label="Overview" icon={<LayoutDashboard size={20} />} />
       </nav>
-      
+
       <div className="mt-auto px-2 py-4 border-t border-border">
         <SidebarItem path="/settings" label="Settings" icon={<Settings size={20} />} />
       </div>

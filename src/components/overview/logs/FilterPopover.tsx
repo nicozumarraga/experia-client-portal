@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/select';
 import { Filter } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 
 interface FilterPopoverProps {
   statusFilter: string;
@@ -38,16 +39,31 @@ const FilterPopover: React.FC<FilterPopoverProps> = ({
   setShowFilters,
   resetFilters
 }) => {
+  // Count active filters (exclude ones set to 'all')
+  const activeFilterCount = [
+    statusFilter !== 'all' ? 1 : 0,
+    typeFilter !== 'all' ? 1 : 0,
+    dateFilter !== 'all' ? 1 : 0
+  ].reduce((sum, current) => sum + current, 0);
+
   return (
     <Popover open={showFilters} onOpenChange={setShowFilters}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          className="h-8 gap-1"
+          className="h-8 gap-1 relative"
         >
           <Filter className="h-4 w-4" />
           <span>Filter</span>
+
+          {activeFilterCount > 0 && (
+            <Badge
+              className="ml-1 bg-primary text-primary-foreground h-5 min-w-5 flex items-center justify-center px-1 text-xs"
+            >
+              {activeFilterCount}
+            </Badge>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80" align="end">
@@ -114,6 +130,7 @@ const FilterPopover: React.FC<FilterPopoverProps> = ({
             variant="outline"
             size="sm"
             onClick={resetFilters}
+            disabled={activeFilterCount === 0}
           >
             Reset Filters
           </Button>
