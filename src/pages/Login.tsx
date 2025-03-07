@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -29,7 +28,7 @@ const Login = () => {
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -51,13 +50,15 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-fiduciary-600 text-white text-2xl font-bold mb-4">
-            F
-          </div>
-          <h1 className="text-2xl font-bold">Fiduciary Document Portal</h1>
+          <img
+            src="/assets/experia_logo.svg"
+            alt="Experia Logo"
+            className="h-16 mx-auto mb-4"
+          />
+          <h1 className="text-2xl font-bold">Experia Sarl Client Portal</h1>
           <p className="text-muted-foreground mt-2">Sign in to access your account</p>
         </div>
-        
+
         <Card className="border-muted/60 shadow-lg animate-fade-in">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
@@ -75,9 +76,9 @@ const Login = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="name@example.com" 
-                          {...field} 
+                        <Input
+                          placeholder="name@example.com"
+                          {...field}
                           autoComplete="email"
                         />
                       </FormControl>
@@ -85,7 +86,7 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="password"
@@ -123,9 +124,9 @@ const Login = () => {
             </Form>
           </CardContent>
           <CardFooter>
-            <Button 
-              type="submit" 
-              form="login-form" 
+            <Button
+              type="submit"
+              form="login-form"
               className="w-full bg-fiduciary-600 hover:bg-fiduciary-700 text-white"
               disabled={isLoading}
             >
@@ -140,7 +141,7 @@ const Login = () => {
             </Button>
           </CardFooter>
         </Card>
-        
+
         <div className="mt-6 text-center text-sm text-muted-foreground">
           <p>For demo purposes, you can use any email and password.</p>
         </div>
