@@ -53,9 +53,8 @@ const Login = () => {
           <img
             src="/assets/experia_logo.svg"
             alt="Experia Logo"
-            className="h-16 mx-auto mb-4"
+            className="h-14 mx-auto mb-4"
           />
-          <h1 className="text-2xl font-bold">Experia Sarl Client Portal</h1>
           <p className="text-muted-foreground mt-2">Sign in to access your account</p>
         </div>
 
